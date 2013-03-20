@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # ------------------------------------------------------------------------------
 # Copyright (C) 2012, Robert Johansson <rob@raditex.nu>, Raditex Control AB
 # All rights reserved.
@@ -13,7 +13,7 @@ from mbus import *
 debug = True
 address = 1
 
-mbus = Mbus("localhost", 1200)
+mbus = MBus("localhost", 1200)
 
 if debug:
     print("mbus = ", mbus)
