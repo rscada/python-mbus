@@ -78,7 +78,7 @@ class MBus:
 
     def __init__(self, device=None, host=None, port=8888):
         """
-        
+        Constructor for MBus class.
         """
 
         if device:
