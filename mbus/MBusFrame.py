@@ -1,25 +1,3 @@
-#!/usr/bin/env python3
-# ------------------------------------------------------------------------------
-# Copyright (C) 2012, Robert Johansson <rob@raditex.nu>, Raditex Control AB
-# All rights reserved.
-# ------------------------------------------------------------------------------
-
-"""
-Python bindings for rSCADA libmbus.
-"""
-
-from ctypes import *
-
-libmbus = None
-try:
-    libmbus = cdll.LoadLibrary('libmbus.so')
-except OSError:
-    libmbus = cdll.LoadLibrary('/usr/local/lib/libmbus.so')
-
-if None == libmbus:
-    raise OSError("libmbus not found")
-    
-
 class MBusFrame(Structure):
     _fields_ = [("start1",   c_uint8 * 16), # MBusFrameFixed
                 ("length1",  c_uint8),
@@ -38,4 +16,3 @@ class MBusFrame(Structure):
 
     def __str__(self):
         return "MBusFrame: XXX"
-
