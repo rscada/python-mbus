@@ -51,7 +51,7 @@ class MBus:
             
     def disconnect(self):
         """
-        Disconnect form MBus.
+        Disconnect from MBus.
         """
         if self.handle:
             if libmbus.mbus_disconnect(self.handle) == -1:
