@@ -4,4 +4,5 @@ import pytest
 from mbus import MBus
 
 def test_empty_init():
-    foo = MBus.MBus()
+    with pytest.raises(Exception):
+        foo = MBus.MBus()
