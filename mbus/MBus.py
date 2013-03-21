@@ -2,6 +2,7 @@
 Python bindings for rSCADA libmbus.
 """
 
+import os
 from ctypes import *
 
 libmbus = None
@@ -21,6 +22,10 @@ class MBus:
         """
 
         if device:
+            fd = os.open(device, os.O_RDONLY)
+            if not os.isatty(fd):
+                raise TypeError(device+" is not a TTY")
+            os.close(fd)
             self.handle = libmbus.mbus_context_serial(device)
         elif host and port:
             self.handle = libmbus.mbus_context_tcp(host)
