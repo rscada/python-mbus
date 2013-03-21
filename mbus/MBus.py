@@ -15,6 +15,9 @@ if None == libmbus:
     raise OSError("libmbus not found")
 
 class MBus:
+    """
+    A class to communicate to a device via MBus.
+    """
 
     def __init__(self, device=None, host=None, port=8888):
         """
@@ -37,7 +40,7 @@ class MBus:
 
     def connect(self):
         """
-        
+        Connect to MBus.
         """
         if self.handle:
             if libmbus.mbus_connect(self.handle) == -1:
@@ -48,7 +51,7 @@ class MBus:
             
     def disconnect(self):
         """
-        
+        Disconnect form MBus.
         """
         if self.handle:
             if libmbus.mbus_disconnect(self.handle) == -1:
