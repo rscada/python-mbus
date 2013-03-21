@@ -19,3 +19,7 @@ def test_device_nonexistent():
 #    with pytest.raises(TypeError):
 #        foo = MBus.MBus('/dev/ttyUSB0')
 # device=None, host=None, port=8888
+
+def test_device_and_host():
+    with pytest.raises(BaseException):
+        foo = MBus.MBus('/dev/null','127.0.0.1')

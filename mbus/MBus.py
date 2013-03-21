@@ -21,6 +21,9 @@ class MBus:
         Constructor for MBus class.
         """
 
+        if (None != device) and (None != host):
+            raise BaseException("conflicting arguments given")
+
         if device:
             fd = os.open(device, os.O_RDONLY)
             if not os.isatty(fd):
