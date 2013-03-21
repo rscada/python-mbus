@@ -33,7 +33,7 @@ class MBus:
         elif host and port:
             self.handle = libmbus.mbus_context_tcp(host)
         else:
-            raise Exception("Must provide either device or host keyword arguments")        
+            raise BaseException("Must provide either device or host keyword arguments")        
 
     def connect(self):
         """

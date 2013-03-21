@@ -4,7 +4,7 @@ import pytest
 from mbus import MBus
 
 def test_empty_init():
-    with pytest.raises(Exception):
+    with pytest.raises(BaseException):
         foo = MBus.MBus()
 
 def test_device_null():
