@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../mbus')
+sys.path.append('../python-mbus')
 import pytest
 from mbus import MBus
 
