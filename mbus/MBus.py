@@ -11,7 +11,7 @@ class MBus:
 
         if device:
             self.handle = libmbus.mbus_context_serial(device)
-        elif address and port:
+        elif host and port:
             self.handle = libmbus.mbus_context_tcp(host)
         else:
             raise Exception("Must provide either device or host keyword arguments")        
