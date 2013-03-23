@@ -9,8 +9,9 @@ except OSError:
 if None == libmbus:
     raise OSError("libmbus not found")
 
+
 class MBusFrame(Structure):
-    _fields_ = [("start1",   c_uint8 * 16), # MBusFrameFixed
+    _fields_ = [("start1",   c_uint8 * 16),  # MBusFrameFixed
                 ("length1",  c_uint8),
                 ("length2",  c_uint8),
                 ("start2",   c_uint8),
@@ -20,10 +21,10 @@ class MBusFrame(Structure):
                 ("checksum", c_uint8),
                 ("stop",     c_uint8),
                 ("data",     c_uint8 * 252),
-                ("data_size", c_uint32), # check
+                ("data_size", c_uint32),  # check
                 ("stop",      c_uint8),
-                ("timestamp", c_uint32), # check
-                ("next",      c_uint8)] # pointer
+                ("timestamp", c_uint32),  # check
+                ("next",      c_uint8)]  # pointer
 
     def __str__(self):
         return "MBusFrame: XXX"

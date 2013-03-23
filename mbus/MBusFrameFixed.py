@@ -9,6 +9,7 @@ except OSError:
 if None == libmbus:
     raise OSError("libmbus not found")
 
+
 class MBusFrameFixed(Structure):
     _fields_ = [("id_bcd",     c_uint8 * 4),
                 ("tx_cnt",     c_uint8),
@@ -19,4 +20,4 @@ class MBusFrameFixed(Structure):
                 ("cnt2_val",   c_uint8 * 4)]
 
     def __str__(self):
-        return "MBusFrameVariable: XXX"
+        return "MBusFrameFixed: "
