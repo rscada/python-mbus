@@ -35,7 +35,7 @@ class MBus:
             os.close(fd)
             self.handle = libmbus.mbus_context_serial(device)
         elif host and port:
-            self.handle = libmbus.mbus_context_tcp(host)
+            self.handle = libmbus.mbus_context_tcp(c_char_p(host), c_int(port))
         else:
             raise BaseException(
                 "Must provide either device or host keyword arguments")
