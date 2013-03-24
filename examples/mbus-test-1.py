@@ -8,20 +8,20 @@
 mbus test: send a request frame and receive and parse the reply
 """
 
-from mbus import *
+from mbus.MBus import MBus
 
 debug = True
 address = 1
 
-mbus = MBus("localhost", 1200)
+mbus = MBus(host="mbus-gw1", port=8888)
 
 if debug:
-    print("mbus = ", mbus)
+    print("mbus = " + str(mbus))
 
 mbus.connect()
 
 if debug:
-    print("mbus = ", mbus)
+    print("mbus = " + str(mbus))
 
 mbus.send_request_frame(address)
 
