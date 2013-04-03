@@ -1,15 +1,3 @@
-from ctypes import *
-
-libmbus = None
-try:
-    libmbus = cdll.LoadLibrary('libmbus.so')
-except OSError:
-    libmbus = cdll.LoadLibrary('/usr/local/lib/libmbus.so')
-
-if None == libmbus:
-    raise OSError("libmbus not found")
-
-
 class MBusFrame(Structure):
     _fields_ = [("start1",   c_uint8 * 16),  # MBusFrameFixed
                 ("length1",  c_uint8),
