@@ -45,7 +45,7 @@ class MBus:
             host = kwargs['host']
 
         if 'port' in kwargs.keys():
-            port = kwargs['ports']
+            port = kwargs['port']
 
         if None == libpath:
             libpath = "/usr/local/lib/libmbus.so"
