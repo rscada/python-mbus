@@ -41,4 +41,4 @@ def test_libpath_shared_object_only():
 
 
 def test_libpath_shared_object_path():
-    foo = MBus.MBus(libpath="/usr/local/lib/libmbus.so")
+    foo = MBus.MBus(libpath="/usr/local/lib/libmbus.so", host="127.0.0.1")
