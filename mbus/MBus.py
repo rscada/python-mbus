@@ -48,7 +48,6 @@ class MBus:
             port = kwargs['ports']
 
 
-
         try:
             self._libmbus = cdll.LoadLibrary('libmbus.so')
         except OSError:
