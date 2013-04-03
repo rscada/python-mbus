@@ -47,14 +47,18 @@ class MBus:
         if 'port' in kwargs.keys():
             port = kwargs['ports']
 
+        if None == libpath:
+            libpath = "/usr/local/lib/libmbus.so"
+
         self._libmbus = cdll.LoadLibrary(libpath)
+
         try:
             self._libmbus.get_current_version()
         except AttributeError:
             raise OSError("libmbus not found")
 
         if (None != device) and (None != host):
-            raise BaseException("conflicting arguments given")
+            raise BaseException("conflicting arguments 'device' and 'host' given")
 
         if (None == device) and (None == host):
             raise BaseException("Must provide either device or host keyword arguments")
@@ -66,7 +70,7 @@ class MBus:
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
             self.handle = self._libmbus.mbus_context_serial(device)
-        elif host and port:
+        elif host != None and port:
             self.handle = self._libmbus.mbus_context_tcp(host)
 
     def connect(self):
