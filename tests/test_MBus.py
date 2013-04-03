@@ -28,3 +28,17 @@ def test_device_nonexistent():
 def test_device_and_host():
     with pytest.raises(BaseException):
         foo = MBus.MBus(device='/dev/null', host='127.0.0.1')
+
+
+def test_libpath_empty():
+    with pytest.raises(OSError):
+        foo = MBus.MBus(libpath='')
+
+
+def test_libpath_shared_object_only():
+    with pytest.raises(OSError):
+        foo = MBus.MBus(libpath='libmbus.so')
+
+
+def test_libpath_shared_object_path():
+    foo = MBus.MBus(libpath="/usr/local/lib/libmbus.so")
