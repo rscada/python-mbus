@@ -9,13 +9,45 @@ class MBus:
 
     _libmbus = None
 
-    def __init__(self, device=None, host=None, port=8888):
+    def __init__(self, *args, **kwargs):
         """
         Constructor for MBus class.
+
+        possible arguments are
+        * device
+        * host
+        * libpath: path to libmbus (shared object or dll)
+        * port: default 8888
         """
 
         import os
         from ctypes import cdll
+
+        # check all given arguments for validity
+        validargs = ('device','host','libpath','port')
+        for arg in kwargs.keys():
+            if arg not in validargs:
+                raise TypeError("invalid argument")
+
+        # set default values
+        device = None
+        host = None
+        port = 8888
+        libpath = None
+
+        if 'device' in kwargs.keys():
+             device = kwargs['device']
+
+        if 'libpath' in kwargs.keys():
+            libpath = kwargs['libpath']
+
+        if 'host' in kwargs.keys():
+            host = kwargs['host']
+
+        if 'port' in kwargs.keys():
+            port = kwargs['ports']
+
+
 
         try:
             self._libmbus = cdll.LoadLibrary('libmbus.so')
