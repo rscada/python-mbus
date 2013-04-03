@@ -45,7 +45,14 @@ class MBus:
             host = kwargs['host']
 
         if 'port' in kwargs.keys():
-            port = kwargs['port']
+            if isinstance(kwargs['port'],int):
+                if 65535 <= kwargs['port']:
+                    raise ValueError("port number too high")
+                if 0 > kwargs['port']:
+                    raise ValueError("port number too low")
+                port = kwargs['port']
+            else:
+                raise TypeError("port number not given as integer")
 
         if None == libpath:
             libpath = "/usr/local/lib/libmbus.so"
