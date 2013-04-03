@@ -2,28 +2,28 @@
 Python bindings for rSCADA libmbus.
 """
 
-import os
-from ctypes import *
-
-libmbus = None
-try:
-    libmbus = cdll.LoadLibrary('libmbus.so')
-except OSError:
-    libmbus = cdll.LoadLibrary('/usr/local/lib/libmbus.so')
-
-if None == libmbus:
-    raise OSError("libmbus not found")
-
-
 class MBus:
     """
     A class to communicate to a device via MBus.
     """
 
+    _libmbus = None
+
     def __init__(self, device=None, host=None, port=8888):
         """
         Constructor for MBus class.
         """
+
+        import os
+        from ctypes import cdll
+
+        try:
+            self._libmbus = cdll.LoadLibrary('libmbus.so')
+        except OSError:
+            self._libmbus = cdll.LoadLibrary('/usr/local/lib/libmbus.so')
+
+        if None == self._libmbus:
+            raise OSError("libmbus not found")
 
         if (None != device) and (None != host):
             raise BaseException("conflicting arguments given")
@@ -33,9 +33,9 @@ class MBus:
             if not os.isatty(fd):
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
-            self.handle = libmbus.mbus_context_serial(device)
+            self.handle = self._libmbus.mbus_context_serial(device)
         elif host and port:
-            self.handle = libmbus.mbus_context_tcp(host)
+            self.handle = self._libmbus.mbus_context_tcp(host)
         else:
             raise BaseException(
                 "Must provide either device or host keyword arguments")
@@ -45,7 +45,7 @@ class MBus:
         Connect to MBus.
         """
         if self.handle:
-            if libmbus.mbus_connect(self.handle) == -1:
+            if self._libmbus.mbus_connect(self.handle) == -1:
                 raise Exception("libmbus.mbus_connect failed")
         else:
             raise Exception("Handle object not configure")
@@ -55,7 +55,7 @@ class MBus:
         Disconnect from MBus.
         """
         if self.handle:
-            if libmbus.mbus_disconnect(self.handle) == -1:
+            if self._libmbus.mbus_disconnect(self.handle) == -1:
                 raise Exception("libmbus.mbus_disconnect failed")
         else:
             raise Exception("Handle object not configure")
@@ -65,7 +65,7 @@ class MBus:
         Low-level function: send an request frame to the given address.
         """
         if self.handle:
-            if libmbus.mbus_send_request_frame(
+            if self._libmbus.mbus_send_request_frame(
                     byref(self.handle), c_int(address)) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
         else:
@@ -81,7 +81,7 @@ class MBus:
 
         reply = MBusFrame()
 
-        if libmbus.mbus_recv_frame(byref(self.handle), byref(reply)) != 0:
+        if self._libmbus.mbus_recv_frame(byref(self.handle), byref(reply)) != 0:
             raise Exception("libmbus.mbus_recv_frame failed")
 
         return reply
@@ -93,7 +93,7 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        if libmbus.mbus_frame_data_parse(byref(reply), byref(reply_data)) != 0:
+        if self._libmbus.mbus_frame_data_parse(byref(reply), byref(reply_data)) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
@@ -103,6 +103,6 @@ class MBus:
         Low-level function: convert reply data frame to xml.
         """
 
-        xml_result = libmbus.mbus_frame_data_xml(byref(reply_data))
+        xml_result = self._libmbus.mbus_frame_data_xml(byref(reply_data))
 
         return reply_data
