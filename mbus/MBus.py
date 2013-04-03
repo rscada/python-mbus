@@ -59,6 +59,10 @@ class MBus:
         if (None != device) and (None != host):
             raise BaseException("conflicting arguments given")
 
+        if (None == device) and (None == host):
+            raise BaseException("Must provide either device or host keyword arguments")
+
+
         if device:
             fd = os.open(device, os.O_RDONLY)
             if not os.isatty(fd):
@@ -67,9 +71,6 @@ class MBus:
             self.handle = self._libmbus.mbus_context_serial(device)
         elif host and port:
             self.handle = self._libmbus.mbus_context_tcp(host)
-        else:
-            raise BaseException(
-                "Must provide either device or host keyword arguments")
 
     def connect(self):
         """
