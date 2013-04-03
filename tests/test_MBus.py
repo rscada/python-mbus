@@ -9,6 +9,11 @@ def test_empty_init():
         foo = MBus.MBus()
 
 
+def test_invalid_argument():
+    with pytest.raises(TypeError):
+        foo = MBus.MBus(foo='bar')
+
+
 def test_device_null():
     with pytest.raises(TypeError):
         foo = MBus.MBus(device='/dev/null')
