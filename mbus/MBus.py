@@ -47,13 +47,10 @@ class MBus:
         if 'port' in kwargs.keys():
             port = kwargs['ports']
 
-
+        self._libmbus = cdll.LoadLibrary(libpath)
         try:
-            self._libmbus = cdll.LoadLibrary('libmbus.so')
-        except OSError:
-            self._libmbus = cdll.LoadLibrary('/usr/local/lib/libmbus.so')
-
-        if None == self._libmbus:
+            self._libmbus.get_current_version()
+        except AttributeError:
             raise OSError("libmbus not found")
 
         if (None != device) and (None != host):
