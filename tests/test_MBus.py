@@ -35,6 +35,30 @@ def test_device_and_host():
         foo = MBus.MBus(device='/dev/null', host='127.0.0.1')
 
 
+def test_port():
+    foo = MBus.MBus(host="127.0.0.1", port=1234)
+
+
+def test_port_too_low():
+    with pytest.raises(ValueError):
+        MBus.MBus(host="127.0.0.1", port=-1)
+
+
+def test_port_too_high():
+    with pytest.raises(ValueError):
+        MBus.MBus(host="127.0.0.1", port=77777)
+
+
+def test_port_float():
+    with pytest.raises(TypeError):
+        MBus.MBus(host="127.0.0.1", port=2.3)
+
+
+def test_port_string():
+    with pytest.raises(TypeError):
+        MBus.MBus(host="127.0.0.1", port="123")
+
+
 def test_libpath_empty():
     with pytest.raises(OSError):
         foo = MBus.MBus(libpath='')
