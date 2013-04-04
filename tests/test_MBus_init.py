@@ -4,13 +4,11 @@ import pytest
 import os
 from mbus import MBus
 
-SERIALDEVICE = '/dev/ttyUSB0'
-
 
 # test if servial evice is connected
 def nohardware():
     try:
-        fd = os.open(SERIALDEVICE, os.O_RDONLY)
+        fd = os.open(config.getini(serialdevice), os.O_RDONLY)
     except OSError:
         return True
     os.close(fd)
@@ -27,23 +25,28 @@ def test_invalid_argument():
         foo = MBus.MBus(foo='bar')
 
 
+@pytest.mark.serial
 def test_device_null():
     with pytest.raises(TypeError):
         foo = MBus.MBus(device='/dev/null')
 
 
+@pytest.mark.serial
 def test_device_nonexistent():
     with pytest.raises(FileNotFoundError):
         foo = MBus.MBus(device='/dev/idonotexist')
 
 
-@pytest.mark.skipif("nohardware()")
-def test_device_serial():
+@pytest.mark.serial
+def test_device_serial(pytestconfig):
+    if '/dev/adjustme' == pytestconfig.getini('serialdevice'):
+        pytest.skip("serial device not configured")
     with pytest.raises(TypeError):
-        foo = MBus.MBus(device=SERIALDEVICE)
+        foo = MBus.MBus(device=pytestconfig.getini('serialdevice'))
 # device=None, host=None, port=8888
 
 
+@pytest.mark.serial
 def test_device_and_host():
     with pytest.raises(BaseException):
         foo = MBus.MBus(device='/dev/null', host='127.0.0.1')
