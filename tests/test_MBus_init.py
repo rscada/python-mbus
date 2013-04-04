@@ -1,7 +1,20 @@
 import sys
 sys.path.append('../python-mbus')
 import pytest
+import os
 from mbus import MBus
+
+SERIALDEVICE = '/dev/ttyUSB0'
+
+
+# test if servial evice is connected
+def nohardware():
+    try:
+        fd = os.open(SERIALDEVICE, os.O_RDONLY)
+    except OSError:
+        return True
+    os.close(fd)
+    return False
 
 
 def test_empty_init():
@@ -24,9 +37,10 @@ def test_device_nonexistent():
         foo = MBus.MBus(device='/dev/idonotexist')
 
 
-#def test_device_ttyUSB0():
-#    with pytest.raises(TypeError):
-#        foo = MBus.MBus(device='/dev/ttyUSB0')
+@pytest.mark.skipif("nohardware()")
+def test_device_serial():
+    with pytest.raises(TypeError):
+        foo = MBus.MBus(device=SERIALDEVICE)
 # device=None, host=None, port=8888
 
 
