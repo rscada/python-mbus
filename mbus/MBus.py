@@ -60,7 +60,7 @@ class MBus:
         self._libmbus = cdll.LoadLibrary(libpath)
 
         try:
-            self._libmbus.get_current_version()
+            self._libmbus.mbus_get_current_version()
         except AttributeError:
             raise OSError("libmbus not found")
 
