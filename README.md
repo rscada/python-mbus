@@ -5,6 +5,8 @@ Python wrapper for [libmbus](http://www.rscada.se/libmbus) ([source](https://git
 
 * installation: run ```python setup.py install```
 * tests: run ```py.test```
+    * please adjust the serial device in pytest.ini
+    * to only run tests involving the serial device, run ```py.test -m serial```
 
 License
 =======
