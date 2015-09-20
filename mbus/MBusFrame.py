@@ -1,3 +1,5 @@
+from ctypes import Structure,c_uint8,c_uint32,c_void_p
+
 class MBusFrame(Structure):
     _fields_ = [("start1",   c_uint8 * 16),  # MBusFrameFixed
                 ("length1",  c_uint8),
@@ -12,7 +14,7 @@ class MBusFrame(Structure):
                 ("data_size", c_uint32),  # check
                 ("stop",      c_uint8),
                 ("timestamp", c_uint32),  # check
-                ("next",      c_uint8)]  # pointer
+                ("next",      c_void_p)]  # pointer
 
     def __str__(self):
         return "MBusFrame: XXX"
