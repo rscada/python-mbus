@@ -2,6 +2,11 @@
 Python bindings for rSCADA libmbus.
 """
 
+from ctypes import c_int,c_char_p,addressof,pointer
+
+from mbus.MBusFrame import MBusFrame
+from mbus.MBusFrameData import MBusFrameData
+
 class MBus:
     """
     A class to communicate to a device via MBus.
@@ -76,6 +81,7 @@ class MBus:
             if not os.isatty(fd):
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
+            self.handle = self._libmbus.mbus_context_serial(device)
         elif host != None and port:
             self.handle = self._libmbus.mbus_context_tcp(host)
 
@@ -105,7 +111,7 @@ class MBus:
         """
         if self.handle:
             if self._libmbus.mbus_send_request_frame(
-                    byref(self.handle), c_int(address)) == -1:
+                    self.handle, c_int(address)) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
         else:
             raise Exception("Handle object not configure")
@@ -115,12 +121,12 @@ class MBus:
         Low-level function: receive a request frame.
         """
 
-        if self.handle:
+        if not self.handle:
             raise Exception("Handle object not configure")
 
         reply = MBusFrame()
 
-        if self._libmbus.mbus_recv_frame(byref(self.handle), byref(reply)) != 0:
+        if self._libmbus.mbus_recv_frame(self.handle, addressof(reply)) != 0:
             raise Exception("libmbus.mbus_recv_frame failed")
 
         return reply
@@ -132,7 +138,7 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        if self._libmbus.mbus_frame_data_parse(byref(reply), byref(reply_data)) != 0:
+        if self._libmbus.mbus_frame_data_parse(addressof(reply), addressof(reply_data)) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
@@ -142,6 +148,11 @@ class MBus:
         Low-level function: convert reply data frame to xml.
         """
 
-        xml_result = self._libmbus.mbus_frame_data_xml(byref(reply_data))
+        mbus_frame_data_xml = self._libmbus.mbus_frame_data_xml
+        mbus_frame_data_xml.restype = c_char_p
+        xml_result = mbus_frame_data_xml(pointer(reply_data))
 
-        return reply_data
+        if not xml_result:
+            raise Exception("libmbus.mbus_frame_data_xml failed")
+
+        return xml_result

@@ -1,6 +1,11 @@
+from ctypes import Structure,c_uint8,c_uint32
+
+from mbus.MBusDataVariable import MBusDataVariable
+from mbus.MBusDataFixed import MBusDataFixed
+
 class MBusFrameData(Structure):
-    _fields_ = [("data_var",   c_uint8 * 16),  # MBusFrameFixed
-                ("data_fixed", c_uint8),
+    _fields_ = [("data_var",   MBusDataVariable),
+                ("data_fixed", MBusDataFixed),
                 ("type",       c_uint32),
                 ("error",      c_uint32)]
 
