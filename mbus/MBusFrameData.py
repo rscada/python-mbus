@@ -10,4 +10,4 @@ class MBusFrameData(Structure):
                 ("error",      c_uint32)]
 
     def __str__(self):
-        return "MBusFrame: XXX"
+        return "MBusFrameData: XXX"
