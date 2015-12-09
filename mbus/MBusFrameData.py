@@ -37,5 +37,16 @@ class MBusFrameData(Structure):
                 ("type",       c_uint32),
                 ("error",      c_uint32)]
 
+    @property
+    def type_id(self):
+        return MBusFrameDataType(self.type)
+
+    @property
+    def error_id(self):
+        if self.type != MBusFrameDataType.Error:
+            return None
+        else:
+            return MBusFrameError(self.error)
+
     def __str__(self):
         return "MBusFrameData: XXX"
