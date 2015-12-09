@@ -26,7 +26,7 @@ class MBus:
         """
 
         import os
-        from ctypes import cdll
+        from ctypes import cdll, util
 
         # check all given arguments for validity
         validargs = ('device','host','libpath','port')
@@ -60,7 +60,7 @@ class MBus:
                 raise TypeError("port number not given as integer")
 
         if None == libpath:
-            libpath = "/usr/local/lib/libmbus.so"
+            libpath = util.find_library('mbus')
 
         self._libmbus = cdll.LoadLibrary(libpath)
 
