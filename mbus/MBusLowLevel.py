@@ -14,6 +14,7 @@ from .MBusDataVariableHeader import MBusDataVariableHeader
 from .MBusDataVariable import MBusDataVariable
 from .MBusHandle import MBusHandle
 from .MBusRecord import MBusRecord
+from .MBusDataRecord import MBusDataRecord
 
 c_char_pp = POINTER(POINTER(c_char))    # http://stackoverflow.com/a/13161052
 c_double_p = POINTER(c_double)
@@ -28,7 +29,7 @@ mbus_handle_p = POINTER(MBusHandle)
 mbus_address_p = POINTER(MBusAddress)
 mbus_record_p = POINTER(MBusRecord)
 mbus_frame_data_p = POINTER(MBusFrameData)
-mbus_data_record_p = c_void_p # TODO
+mbus_data_record_p = POINTER(MBusDataRecord)
 mbus_data_variable_p = POINTER(MBusDataVariable)
 mbus_data_fixed_p = POINTER(MBusDataFixed)
 mbus_slave_data_p = c_void_p # TODO

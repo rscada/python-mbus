@@ -1,11 +1,13 @@
-from ctypes import Structure,c_uint8,c_void_p,c_size_t,c_char_p
+from ctypes import Structure, c_uint8, c_size_t, c_char_p, POINTER
 
-from mbus.MBusDataVariableHeader import MBusDataVariableHeader
+from .MBusDataVariableHeader import MBusDataVariableHeader
+from .MBusDataRecord import MBusDataRecord
 
+mbus_data_record_p = POINTER(MBusDataRecord)
 
 class MBusDataVariable(Structure):
     _fields_ = [("header", MBusDataVariableHeader),
-                ("record", c_void_p),
+                ("record", mbus_data_record_p),
                 ("nrecords", c_size_t),
                 ("data", c_char_p),
                 ("data_len", c_size_t),
