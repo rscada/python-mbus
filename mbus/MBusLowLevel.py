@@ -6,11 +6,14 @@ from ctypes import c_int, c_long, c_longlong, c_char_p, c_void_p, \
         c_char, c_byte, c_ubyte, c_double, POINTER, cdll
 from ctypes.util import find_library
 
+from .MBusFrame import MBusFrame
+
 c_char_pp = POINTER(POINTER(c_char))    # http://stackoverflow.com/a/13161052
 c_double_p = POINTER(c_double)
 c_int_p = POINTER(c_int)
 c_long_p = POINTER(c_long)
 c_longlong_p = POINTER(c_long)
+mbus_frame_p = POINTER(MBusFrame)
 
 class MBusLib(object):
     """
@@ -190,10 +193,10 @@ class MBusLib(object):
 
         self.frame_new                      = lib.mbus_frame_new
         self.frame_new.argtypes             = []
-        self.frame_new.restype              = c_void_p
+        self.frame_new.restype              = mbus_frame_p
 
         self.frame_free                     = lib.mbus_frame_free
-        self.frame_free.argtypes            = [c_void_p]
+        self.frame_free.argtypes            = [mbus_frame_p]
         self.frame_free.restypes            = None
 
         self.frame_data_new                 = lib.mbus_frame_data_new
