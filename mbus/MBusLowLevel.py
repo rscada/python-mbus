@@ -6,6 +6,7 @@ from ctypes import c_int, c_long, c_longlong, c_char_p, c_void_p, \
         c_char, c_byte, c_ubyte, c_double, POINTER, cdll
 from ctypes.util import find_library
 
+from .MBusAddress import MBusAddress
 from .MBusFrame import MBusFrame
 from .MBusFrameData import MBusFrameData
 from .MBusDataFixed import MBusDataFixed
@@ -25,7 +26,7 @@ c_tm_p = c_void_p
 
 mbus_frame_p = POINTER(MBusFrame)
 mbus_handle_p = POINTER(MBusHandle)
-mbus_address_p = c_void_p # TODO
+mbus_address_p = POINTER(MBusAddress)
 mbus_record_p = c_void_p # TODO
 mbus_frame_data_p = POINTER(MBusFrameData)
 mbus_data_record_p = c_void_p # TODO
