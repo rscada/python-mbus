@@ -6,7 +6,7 @@ from mbus import MBus
 
 @pytest.fixture
 def mbus_tcp():
-    return MBus.MBus(libpath="/usr/local/lib/libmbus.so", host="127.0.0.1")
+    return MBus.MBus(host="127.0.0.1")
 
 
 def test_connect(mbus_tcp):
