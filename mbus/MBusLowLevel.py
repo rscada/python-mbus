@@ -3,7 +3,7 @@ Low-level function call wrappers for libmbus
 """
 
 from ctypes import c_int, c_long, c_longlong, c_char_p, c_void_p, \
-        c_char, c_byte, c_ubyte, c_double, POINTER, cdll
+        c_char, c_byte, c_ubyte, c_double, POINTER, cdll, c_size_t
 from ctypes.util import find_library
 
 from .MBusAddress import MBusAddress
@@ -116,10 +116,9 @@ class MBusLib(object):
         self.send_request_frame.argtypes    = [mbus_handle_p, c_int]
         self.send_request_frame.restype     = c_int
 
-        # Hopefully c_long is appropriate; it really is a size_t.
         self.send_user_data_frame           = lib.mbus_send_user_data_frame
         self.send_user_data_frame.argtypes  = [mbus_handle_p, c_int,
-                                                c_ubyte_p, c_long]
+                                                c_ubyte_p, c_size_t]
         self.send_user_data_frame.restype   = c_int
 
         self.sendrecv_request               = lib.mbus_sendrecv_request
@@ -190,8 +189,8 @@ class MBusLib(object):
         self.scan_2nd_address_range.restype     = c_int
 
         self.hex2bin                        = lib.mbus_hex2bin
-        self.hex2bin.argtypes               = [c_ubyte_p, c_long,
-                                                c_char_p, c_long]
+        self.hex2bin.argtypes               = [c_ubyte_p, c_size_t,
+                                                c_char_p, c_size_t]
         self.hex2bin.restype                = c_long
 
         # mbus-protocol.h
@@ -200,11 +199,11 @@ class MBusLib(object):
         self.manufacturer_id.restype        = c_int
 
         self.dump_recv_event                = lib.mbus_dump_recv_event
-        self.dump_recv_event.argtypes       = [c_ubyte, c_char_p, c_long]
+        self.dump_recv_event.argtypes       = [c_ubyte, c_char_p, c_size_t]
         self.dump_recv_event.restype        = None
 
         self.dump_send_event                = lib.mbus_dump_send_event
-        self.dump_send_event.argtypes       = [c_ubyte, c_char_p, c_long]
+        self.dump_send_event.argtypes       = [c_ubyte, c_char_p, c_size_t]
         self.dump_send_event.restype        = None
 
         self.data_record_new                = lib.mbus_data_record_new
@@ -245,7 +244,8 @@ class MBusLib(object):
         self.frame_calc_length.restypes     = c_int
 
         self.parse                          = lib.mbus_parse
-        self.parse.argtypes                 = [mbus_frame_p, c_ubyte_p, c_long]
+        self.parse.argtypes                 = [mbus_frame_p, c_ubyte_p,
+                                                c_size_t]
         self.parse.restype                  = c_int
 
         self.data_fixed_parse               = lib.mbus_data_fixed_parse
@@ -261,7 +261,8 @@ class MBusLib(object):
         self.frame_data_parse.restype       = c_int
 
         self.frame_pack                     = lib.mbus_frame_pack
-        self.frame_pack.argtypes            = [mbus_frame_p, c_ubyte_p, c_long]
+        self.frame_pack.argtypes            = [mbus_frame_p, c_ubyte_p,
+                                                c_size_t]
         self.frame_pack.restype             = c_int
 
         self.frame_verify                   = lib.mbus_frame_verify
@@ -301,11 +302,11 @@ class MBusLib(object):
         self.frame_direction.restype        = c_int
 
         self.slave_data_get                 = lib.mbus_slave_data_get
-        self.slave_data_get.argtypes        = [c_long]
+        self.slave_data_get.argtypes        = [c_size_t]
         self.slave_data_get.restype         = mbus_slave_data_p
 
         self.str_xml_encode                 = lib.mbus_str_xml_encode
-        self.str_xml_encode.argtypes        = [c_char_p, c_char_p, c_long]
+        self.str_xml_encode.argtypes        = [c_char_p, c_char_p, c_size_t]
         self.str_xml_encode.restype         = None
 
         #self.data_xml                       = lib.mbus_data_xml
@@ -379,7 +380,7 @@ class MBusLib(object):
         self.parse_set_debug.restype        = None
 
         self.hex_dump                       = lib.mbus_hex_dump
-        self.hex_dump.argtypes              = [c_char_p, c_char_p, c_long]
+        self.hex_dump.argtypes              = [c_char_p, c_char_p, c_size_t]
         self.hex_dump.restype               = None
 
         self.data_manufacturer_encode       = lib.mbus_data_manufacturer_encode
@@ -395,27 +396,28 @@ class MBusLib(object):
         self.data_product_name.restype      = c_char_p
 
         self.data_bcd_encode                = lib.mbus_data_bcd_encode
-        self.data_bcd_encode.argtypes       = [c_ubyte_p, c_long, c_int]
+        self.data_bcd_encode.argtypes       = [c_ubyte_p, c_size_t, c_int]
         self.data_bcd_encode.restype        = c_int
 
         self.data_int_encode                = lib.mbus_data_int_encode
-        self.data_int_encode.argtypes       = [c_ubyte_p, c_long, c_int]
+        self.data_int_encode.argtypes       = [c_ubyte_p, c_size_t, c_int]
         self.data_int_encode.restype        = c_int
 
         self.data_bcd_decode                = lib.mbus_data_bcd_decode
-        self.data_bcd_decode.argtypes       = [c_ubyte_p, c_long]
+        self.data_bcd_decode.argtypes       = [c_ubyte_p, c_size_t]
         self.data_bcd_decode.restype        = c_longlong
 
         self.data_int_decode                = lib.mbus_data_int_decode
-        self.data_int_decode.argtypes       = [c_ubyte_p, c_long, c_int_p]
+        self.data_int_decode.argtypes       = [c_ubyte_p, c_size_t, c_int_p]
         self.data_int_decode.restype        = c_int
 
         self.data_long_decode               = lib.mbus_data_long_decode
-        self.data_long_decode.argtypes      = [c_ubyte_p, c_long, c_long_p]
+        self.data_long_decode.argtypes      = [c_ubyte_p, c_size_t, c_long_p]
         self.data_long_decode.restype       = c_int
 
         self.data_long_long_decode          = lib.mbus_data_long_long_decode
-        self.data_long_long_decode.argtypes = [c_ubyte_p, c_long, c_longlong_p]
+        self.data_long_long_decode.argtypes = [c_ubyte_p, c_size_t,
+                                                c_longlong_p]
         self.data_long_long_decode.restype  = c_int
 
         self.data_float_decode              = lib.mbus_data_float_decode
@@ -423,16 +425,16 @@ class MBusLib(object):
         self.data_float_decode.restype      = c_int
 
         self.data_tm_decode                 = lib.mbus_data_tm_decode
-        self.data_tm_decode.argtypes        = [c_tm_p, c_ubyte_p, c_long]
+        self.data_tm_decode.argtypes        = [c_tm_p, c_ubyte_p, c_size_t]
         self.data_tm_decode.restype         = None
 
         self.data_str_decode                = lib.mbus_data_str_decode
-        self.data_str_decode.argtypes       = [c_ubyte_p, c_ubyte_p, c_long]
+        self.data_str_decode.argtypes       = [c_ubyte_p, c_ubyte_p, c_size_t]
         self.data_str_decode.restype        = None
 
         self.data_bin_decode                = lib.mbus_data_bin_decode
         self.data_bin_decode.argtypes       = [c_ubyte_p, c_ubyte_p,
-                                                c_long, c_long]
+                                                c_size_t, c_size_t]
         self.data_bin_decode.restype        = None
 
         self.data_fixed_medium              = lib.mbus_data_fixed_medium
