@@ -1,4 +1,4 @@
-from ctypes import Structure, c_uint32, c_uint8, c_void_p, c_int, c_byte
+from ctypes import Structure, c_uint8, c_void_p, c_int, c_byte
 
 class MBusHandle(Structure):
     _fields_ = [("fd",                  c_int),
