@@ -2,7 +2,7 @@
 Python bindings for rSCADA libmbus.
 """
 
-from ctypes import c_int,c_char_p,addressof,pointer
+from ctypes import c_int,c_char_p,c_void_p,addressof,pointer,POINTER
 
 from mbus.MBusFrame import MBusFrame
 from mbus.MBusFrameData import MBusFrameData
@@ -81,16 +81,22 @@ class MBus:
             if not os.isatty(fd):
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
-            self.handle = self._libmbus.mbus_context_serial(device)
+            mbus_context_serial = self._libmbus.mbus_context_serial
+            mbus_context_serial.restype = c_void_p
+            self.handle = mbus_context_serial(device)
         elif host != None and port:
-            self.handle = self._libmbus.mbus_context_tcp(host)
+            mbus_context_tcp = self._libmbus.mbus_context_tcp
+            mbus_context_tcp.restype = c_void_p
+            self.handle = mbus_context_tcp(host)
 
     def connect(self):
         """
         Connect to MBus.
         """
         if self.handle:
-            if self._libmbus.mbus_connect(self.handle) == -1:
+            mbus_connect = self._libmbus.mbus_connect
+            mbus_connect.argtypes = [c_void_p]
+            if mbus_connect(self.handle) == -1:
                 raise Exception("libmbus.mbus_connect failed")
         else:
             raise Exception("Handle object not configure")
@@ -100,7 +106,9 @@ class MBus:
         Disconnect from MBus.
         """
         if self.handle:
-            if self._libmbus.mbus_disconnect(self.handle) == -1:
+            mbus_disconnect = self._libmbus.mbus_disconnect
+            mbus_disconnect.argtypes = [c_void_p]
+            if mbus_disconnect(self.handle) == -1:
                 raise Exception("libmbus.mbus_disconnect failed")
         else:
             raise Exception("Handle object not configure")
@@ -110,8 +118,9 @@ class MBus:
         Low-level function: send an request frame to the given address.
         """
         if self.handle:
-            if self._libmbus.mbus_send_request_frame(
-                    self.handle, c_int(address)) == -1:
+            mbus_send_request_frame = self._libmbus.mbus_send_request_frame
+            mbus_send_request_frame.argtypes = [c_void_p, c_int]
+            if mbus_send_request_frame(self.handle, c_int(address)) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
         else:
             raise Exception("Handle object not configure")
@@ -126,7 +135,9 @@ class MBus:
 
         reply = MBusFrame()
 
-        if self._libmbus.mbus_recv_frame(self.handle, addressof(reply)) != 0:
+        mbus_recv_frame = self._libmbus.mbus_recv_frame
+        mbus_recv_frame.argtypes = [c_void_p, c_void_p]
+        if mbus_recv_frame(self.handle, addressof(reply)) != 0:
             raise Exception("libmbus.mbus_recv_frame failed")
 
         return reply
@@ -138,7 +149,9 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        if self._libmbus.mbus_frame_data_parse(addressof(reply), addressof(reply_data)) != 0:
+        mbus_frame_data_parse = self._libmbus.mbus_frame_data_parse
+        mbus_frame_data_parse.argtypes = [c_void_p, c_void_p]
+        if mbus_frame_data_parse(addressof(reply), addressof(reply_data)) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
