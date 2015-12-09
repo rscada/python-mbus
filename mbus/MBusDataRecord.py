@@ -1,4 +1,4 @@
-from ctypes import Structure, c_ubyte, c_size_t, c_long, c_void_p
+from ctypes import Structure, c_ubyte, c_size_t, c_long, POINTER
 
 # TODO: is this correct?
 c_time_t = c_long
@@ -28,10 +28,11 @@ class MBusDataRecordHeader(Structure):
 
 
 class MBusDataRecord(Structure):
-    _fields_ = [
+    pass
+MBusDataRecord._fields_ = [
             ('drh',         MBusDataRecordHeader),
             ('data',        c_ubyte * 234),
             ('data_len',    c_size_t),
             ('timestamp',   c_time_t),
-            ('next',        c_void_p),
+            ('next',        POINTER(MBusDataRecord)),
     ]
