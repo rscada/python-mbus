@@ -269,5 +269,9 @@ class MBusDataVariableHeader(Structure):
                 ("status",       c_uint8),
                 ("signature",    c_uint8 * 2)]
 
+    @property
+    def medium_type(self):
+        return MBusDataVariableMedium(self.medium)
+
     def __str__(self):
         return "MBusDataVariableHeader: XXX"
