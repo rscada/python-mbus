@@ -12,7 +12,6 @@ from .MBusFrameData import MBusFrameData
 from .MBusDataFixed import MBusDataFixed
 from .MBusDataVariableHeader import MBusDataVariableHeader
 from .MBusDataVariable import MBusDataVariable
-from .MBusFrameData import MBusFrameData
 from .MBusFrameFixed import MBusFrameFixed
 from .MBusHandle import MBusHandle
 
