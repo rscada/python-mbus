@@ -2,16 +2,15 @@
 Low-level function call wrappers for libmbus
 """
 
-from ctypes import c_int, c_long, c_long_long, c_char_p, c_void_p, \
-        c_char, c_byte, c_ubyte, c_double, POINTER
-from ctypes.cdll import LoadLibrary
+from ctypes import c_int, c_long, c_longlong, c_char_p, c_void_p, \
+        c_char, c_byte, c_ubyte, c_double, POINTER, cdll
 from ctypes.util import find_library
 
 c_char_pp = POINTER(POINTER(c_char))    # http://stackoverflow.com/a/13161052
 c_double_p = POINTER(c_double)
 c_int_p = POINTER(c_int)
 c_long_p = POINTER(c_long)
-c_long_long_p = POINTER(c_long)
+c_longlong_p = POINTER(c_long)
 
 class MBusLib(object):
     """
@@ -27,7 +26,7 @@ class MBusLib(object):
         if libpath is None:
             libpath = find_library('mbus')
 
-        lib = LoadLibrary(libpath)
+        lib = cdll.LoadLibrary(libpath)
 
         # Define the methods from libmbus
 
@@ -85,8 +84,8 @@ class MBusLib(object):
         self.send_application_reset_frame.restype   = c_int
 
         self.send_switch_baudrate_frame   = lib.mbus_send_switch_baudrate_frame
-        self.switch_baudratereset_frame.argtypes  = [c_void_p, c_int, c_long]
-        self.switch_baudratereset_frame.restype   = c_int
+        self.send_switch_baudrate_frame.argtypes  = [c_void_p, c_int, c_long]
+        self.send_switch_baudrate_frame.restype   = c_int
 
         self.send_request_frame             = lib.mbus_send_request_frame
         self.send_request_frame.argtypes    = [c_void_p, c_int]
@@ -131,25 +130,25 @@ class MBusLib(object):
         self.parse_variable_record.argtypes = [c_void_p]
         self.parse_variable_record.restype  = c_void_p
 
-        self.data_fixed_normalize           = lib.mbus_data_fixed_normalize
-        self.data_fixed_normalize.argtypes  = [c_int, c_long, c_char_pp,
-                                                c_double_p, c_char_pp]
-        self.data_fixed_normalize.restype   = c_int
+        #self.data_fixed_normalize           = lib.mbus_data_fixed_normalize
+        #self.data_fixed_normalize.argtypes  = [c_int, c_long, c_char_pp,
+        #                                        c_double_p, c_char_pp]
+        #self.data_fixed_normalize.restype   = c_int
 
-        self.data_variable_value_decode     = lib.mbus_data_variable_value_decode
-        self.data_variable_value_decode.argtypes    = [c_void_p, c_double_p,
-                                                        c_char_pp, c_int_p]
-        self.data_variable_value_decode.restype     = c_int
+        #self.data_variable_value_decode     = lib.mbus_data_variable_value_decode
+        #self.data_variable_value_decode.argtypes    = [c_void_p, c_double_p,
+        #                                                c_char_pp, c_int_p]
+        #self.data_variable_value_decode.restype     = c_int
 
-        self.data_vif_unit_normalize     = lib.mbus_data_vif_unit_normalize
-        self.data_vif_unit_normalize.argtypes       = [
-                        c_int, c_double, c_char_pp, c_double_p, c_char_pp]
-        self.data_vif_unit_normalize.restype        = c_int
+        #self.data_vif_unit_normalize     = lib.mbus_data_vif_unit_normalize
+        #self.data_vif_unit_normalize.argtypes       = [
+        #                c_int, c_double, c_char_pp, c_double_p, c_char_pp]
+        #self.data_vif_unit_normalize.restype        = c_int
 
-        self.data_vib_unit_normalize     = lib.mbus_data_vib_unit_normalize
-        self.data_vib_unit_normalize.argtypes       = [
-                        c_void_p, c_double, c_char_pp, c_double_p, c_char_pp]
-        self.data_vib_unit_normalize.restype        = c_int
+        #self.data_vib_unit_normalize     = lib.mbus_data_vib_unit_normalize
+        #self.data_vib_unit_normalize.argtypes       = [
+        #                c_void_p, c_double, c_char_pp, c_double_p, c_char_pp]
+        #self.data_vib_unit_normalize.restype        = c_int
 
         self.data_variable_xml_normalized     = lib.mbus_data_variable_xml_normalized
         self.data_variable_xml_normalized.argtypes       = [c_void_p]
@@ -229,17 +228,17 @@ class MBusLib(object):
         self.frame_data_parse.argtypes      = [c_void_p, c_void_p]
         self.frame_data_parse.restype       = c_int
 
-        self.frame_data_pack                = lib.mbus_frame_data_pack
-        self.frame_data_pack.argtypes       = [c_void_p, c_void_p, c_long]
-        self.frame_data_pack.restype        = c_int
+        #self.frame_data_pack                = lib.mbus_frame_data_pack
+        #self.frame_data_pack.argtypes       = [c_void_p, c_void_p, c_long]
+        #self.frame_data_pack.restype        = c_int
 
         self.frame_verify                   = lib.mbus_frame_verify
         self.frame_verify.argtypes          = [c_void_p]
         self.frame_verify.restype           = c_int
 
-        self.frame_internal_data_pack       = lib.mbus_frame_internal_data_pack
-        self.frame_internal_data_pack.argtypes  = [c_void_p, c_void_p]
-        self.frame_internal_data_pack.restype   = c_int
+        #self.frame_internal_data_pack       = lib.mbus_frame_internal_data_pack
+        #self.frame_internal_data_pack.argtypes  = [c_void_p, c_void_p]
+        #self.frame_internal_data_pack.restype   = c_int
 
         self.data_record_function           = lib.mbus_data_record_function
         self.data_record_function.argtypes  = [c_void_p]
@@ -277,9 +276,9 @@ class MBusLib(object):
         self.str_xml_encode.argtypes        = [c_char_p, c_char_p, c_long]
         self.str_xml_encode.restype         = None
 
-        self.data_xml                       = lib.mbus_data_xml
-        self.data_xml.argtypes              = [c_void_p]
-        self.data_xml.restype               = c_char_p
+        #self.data_xml                       = lib.mbus_data_xml
+        #self.data_xml.argtypes              = [c_void_p]
+        #self.data_xml.restype               = c_char_p
 
         self.data_variable_xml              = lib.mbus_data_variable_xml
         self.data_variable_xml.argtypes     = [c_void_p]
@@ -338,9 +337,9 @@ class MBusLib(object):
         self.error_str_set.argtypes         = [c_char_p]
         self.error_str_set.restype          = None
 
-        self.error_str_reset                = lib.mbus_error_str_reset
-        self.error_str_reset.argtypes       = []
-        self.error_str_reset.restype        = None
+        #self.error_str_reset                = lib.mbus_error_str_reset
+        #self.error_str_reset.argtypes       = []
+        #self.error_str_reset.restype        = None
 
         self.parse_set_debug                = lib.mbus_parse_set_debug
         self.parse_set_debug.argtypes       = [c_int]
@@ -372,7 +371,7 @@ class MBusLib(object):
 
         self.data_bcd_decode                = lib.mbus_data_bcd_decode
         self.data_bcd_decode.argtypes       = [c_void_p, c_long]
-        self.data_bcd_decode.restype        = c_long_long
+        self.data_bcd_decode.restype        = c_longlong
 
         self.data_int_decode                = lib.mbus_data_int_decode
         self.data_int_decode.argtypes       = [c_void_p, c_long, c_int_p]
@@ -383,7 +382,7 @@ class MBusLib(object):
         self.data_long_decode.restype       = c_int
 
         self.data_long_long_decode          = lib.mbus_data_long_long_decode
-        self.data_long_long_decode.argtypes = [c_void_p, c_long, c_long_long_p]
+        self.data_long_long_decode.argtypes = [c_void_p, c_long, c_longlong_p]
         self.data_long_long_decode.restype  = c_int
 
         self.data_float_decode              = lib.mbus_data_float_decode
@@ -416,26 +415,26 @@ class MBusLib(object):
         self.data_variable_medium_lookup.argtypes   = [c_ubyte]
         self.data_variable_medium_lookup.restype    = c_char_p
 
-        self.data_unit_prefix               = lib.mbus_data_unit_prefix
-        self.data_unit_prefix.argtypes      = [c_int]
-        self.data_unit_prefix.restype       = c_char_p
+        #self.data_unit_prefix               = lib.mbus_data_unit_prefix
+        #self.data_unit_prefix.argtypes      = [c_int]
+        #self.data_unit_prefix.restype       = c_char_p
 
         self.data_error_lookup              = lib.mbus_data_error_lookup
         self.data_error_lookup.argtypes     = [c_int]
         self.data_error_lookup.restype      = c_char_p
 
-        self.data_vib_unit_lookup           = lib.mbus_data_vib_unit_lookup
-        self.data_vib_unit_lookup.argtypes  = [c_int]
-        self.data_vib_unit_lookup.restype   = c_char_p
+        #self.data_vib_unit_lookup           = lib.mbus_data_vib_unit_lookup
+        #self.data_vib_unit_lookup.argtypes  = [c_int]
+        #self.data_vib_unit_lookup.restype   = c_char_p
 
-        self.data_vif_unit_lookup           = lib.mbus_data_vif_unit_lookup
-        self.data_vif_unit_lookup.argtypes  = [c_ubyte]
-        self.data_vif_unit_lookup.restype   = c_char_p
+        #self.data_vif_unit_lookup           = lib.mbus_data_vif_unit_lookup
+        #self.data_vif_unit_lookup.argtypes  = [c_ubyte]
+        #self.data_vif_unit_lookup.restype   = c_char_p
 
-        self.data_dif_datalength_lookup     = \
-                lib.mbus_data_dif_datalength_lookup
-        self.data_dif_datalength_lookup.argtypes    = [c_ubyte]
-        self.data_dif_datalength_lookup.restype     = c_ubyte
+        #self.data_dif_datalength_lookup     = \
+        #        lib.mbus_data_dif_datalength_lookup
+        #self.data_dif_datalength_lookup.argtypes    = [c_ubyte]
+        #self.data_dif_datalength_lookup.restype     = c_ubyte
 
         self.frame_get_secondary_address    = \
                 lib.mbus_frame_get_secondary_address
