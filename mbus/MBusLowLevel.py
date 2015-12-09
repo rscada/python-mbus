@@ -9,6 +9,11 @@ from ctypes.util import find_library
 from .MBusFrame import MBusFrame
 from .MBusFrameData import MBusFrameData
 from .MBusDataFixed import MBusDataFixed
+from .MBusDataVariableHeader import MBusDataVariableHeader
+from .MBusDataVariable import MBusDataVariable
+from .MBusFrameData import MBusFrameData
+from .MBusFrameFixed import MBusFrameFixed
+from .MBusHandle import MBusHandle
 
 c_char_pp = POINTER(POINTER(c_char))    # http://stackoverflow.com/a/13161052
 c_double_p = POINTER(c_double)
@@ -19,15 +24,15 @@ c_ubyte_p = POINTER(c_ubyte)
 c_tm_p = c_void_p
 
 mbus_frame_p = POINTER(MBusFrame)
-mbus_handle_p = c_void_p # TODO
+mbus_handle_p = POINTER(MBusHandle)
 mbus_address_p = c_void_p # TODO
 mbus_record_p = c_void_p # TODO
 mbus_frame_data_p = POINTER(MBusFrameData)
 mbus_data_record_p = c_void_p # TODO
-mbus_data_variable_p = c_void_p # TODO
+mbus_data_variable_p = POINTER(MBusDataVariable)
 mbus_data_fixed_p = POINTER(MBusDataFixed)
 mbus_slave_data_p = c_void_p # TODO
-mbus_data_variable_header_p = c_void_p # TODO
+mbus_data_variable_header_p = POINTER(MBusDataVariableHeader)
 mbus_value_information_block_p = c_void_p # TODO
 
 class MBusLib(object):
