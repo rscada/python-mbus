@@ -132,7 +132,7 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        if self._libmbus.frame_data_parse(reply, addressof(reply_data)) != 0:
+        if self._libmbus.frame_data_parse(reply, reply_data) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
@@ -142,7 +142,7 @@ class MBus:
         Low-level function: convert reply data frame to xml.
         """
 
-        xml_result = self._libmbus.frame_data_xml(pointer(reply_data))
+        xml_result = self._libmbus.frame_data_xml(reply_data)
 
         if not xml_result:
             raise Exception("libmbus.mbus_frame_data_xml failed")
