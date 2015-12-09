@@ -2,8 +2,6 @@
 Python bindings for rSCADA libmbus.
 """
 
-from ctypes import c_int,c_char_p,c_void_p,addressof,pointer,POINTER
-
 from .MBusFrame import MBusFrame
 from .MBusFrameData import MBusFrameData
 from .MBusLowLevel import MBusLib
@@ -105,7 +103,7 @@ class MBus:
         Low-level function: send an request frame to the given address.
         """
         if self.handle:
-            if self._libmbus.send_request_frame(self.handle, c_int(address)) == -1:
+            if self._libmbus.send_request_frame(self.handle, address) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
         else:
             raise Exception("Handle object not configure")
