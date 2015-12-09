@@ -120,7 +120,7 @@ class MBus:
 
         reply = MBusFrame()
 
-        if self._libmbus.recv_frame(self.handle, addressof(reply)) != 0:
+        if self._libmbus.recv_frame(self.handle, reply) != 0:
             raise Exception("libmbus.mbus_recv_frame failed")
 
         return reply
@@ -132,7 +132,7 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        if self._libmbus.frame_data_parse(addressof(reply), addressof(reply_data)) != 0:
+        if self._libmbus.frame_data_parse(reply, addressof(reply_data)) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
