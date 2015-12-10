@@ -76,7 +76,7 @@ class MBus:
             os.close(fd)
             self.handle = self._libmbus.context_serial(device)
         elif host != None and port:
-            self.handle = self._libmbus.context_tcp(host)
+            self.handle = self._libmbus.context_tcp(host, port)
 
     def connect(self):
         """

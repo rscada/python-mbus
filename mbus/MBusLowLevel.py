@@ -3,7 +3,7 @@ Low-level function call wrappers for libmbus
 """
 
 from ctypes import c_int, c_long, c_longlong, c_char_p, c_void_p, \
-        c_char, c_byte, c_ubyte, c_double, POINTER, cdll, c_size_t
+        c_char, c_byte, c_ubyte, c_double, POINTER, cdll, c_size_t, c_uint16
 from ctypes.util import find_library
 
 from .MBusAddress import MBusAddress
@@ -63,7 +63,7 @@ class MBusLib(object):
 
         # mbus-protocol-aux.h
         self.context_tcp                    = lib.mbus_context_tcp
-        self.context_tcp.argtypes           = [c_char_p]
+        self.context_tcp.argtypes           = [c_char_p, c_uint16]
         self.context_tcp.restype            = mbus_handle_p
 
         self.context_serial                 = lib.mbus_context_serial
