@@ -42,15 +42,20 @@ mbus_value_information_block_p = POINTER(MBusValueInformationBlock)
 # curate the list.
 #
 # The following is generated against libmbus using the following command:
-# $ sed -n -e 's/#define[ \t]\+\(MBUS_[A-Z0-0_]\+\)[ \t]\+\([0-9a-fx]\+\)$/\1 = \2/i p' ../libmbus/mbus/*.h
+# $ sed -n -e 's/#define[ \t]\+\(MBUS_[A-Z0-0_]\+\)[ \t]\+\(-\?[0-9a-fx]\+\)$/\1 = \2/i p' ../libmbus/mbus/*.h
 MBUS_PROBE_NOTHING = 0
 MBUS_PROBE_SINGLE = 1
 MBUS_PROBE_COLLISION = 2
+MBUS_PROBE_ERROR = -1
 MBUS_FRAME_PURGE_NONE = 0
 MBUS_FRAME_DATA_LENGTH = 252
 MBUS_HANDLE_TYPE_TCP = 0
 MBUS_HANDLE_TYPE_SERIAL = 1
 MBUS_RECV_RESULT_OK = 0
+MBUS_RECV_RESULT_ERROR = -1
+MBUS_RECV_RESULT_INVALID = -2
+MBUS_RECV_RESULT_TIMEOUT = -3
+MBUS_RECV_RESULT_RESET = -4
 MBUS_DIB_DIF_WITHOUT_EXTENSION = 0x7F
 MBUS_DIB_DIF_EXTENSION_BIT = 0x80
 MBUS_DIB_VIF_WITHOUT_EXTENSION = 0x7F
