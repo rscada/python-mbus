@@ -260,7 +260,7 @@ class MBusLib(object):
         self.sendrecv_request.restype       = c_int
 
         self.select_secondary_address       = lib.mbus_select_secondary_address
-        self.select_secondary_address.argtypes  = [mbus_frame_p, c_char_p]
+        self.select_secondary_address.argtypes  = [mbus_handle_p, c_char_p]
         self.select_secondary_address.restype   = c_int
 
         self.probe_secondary_address        = lib.mbus_probe_secondary_address
