@@ -12,6 +12,8 @@ class MBus:
     A class to communicate to a device via MBus.
     """
 
+    MBUS_ADDRESS_NETWORK_LAYER = 0xFD
+
     _libmbus = None
 
     def __init__(self, *args, **kwargs):
@@ -113,6 +115,17 @@ class MBus:
             if self._libmbus.mbus_send_request_frame(
                     self.handle, c_int(address)) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
+        else:
+            raise Exception("Handle object not configure")
+
+    def select_secondary_address(self, address):
+        """
+        Low-level function: select secondary address
+        """
+        if self.handle:
+            if self._libmbus.mbus_select_secondary_address(
+                    self.handle, c_char_p(str.encode(str(address)))) == -1:
+                raise Exception("libmbus.mbus_select_secondary_address failed")
         else:
             raise Exception("Handle object not configure")
 
