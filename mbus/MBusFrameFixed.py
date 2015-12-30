@@ -1,3 +1,5 @@
+from ctypes import Structure, c_uint8
+
 class MBusFrameFixed(Structure):
     _fields_ = [("id_bcd",     c_uint8 * 4),
                 ("tx_cnt",     c_uint8),

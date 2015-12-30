@@ -2,10 +2,9 @@
 Python bindings for rSCADA libmbus.
 """
 
-from ctypes import c_int,c_char_p,c_void_p,addressof,pointer,POINTER
-
-from mbus.MBusFrame import MBusFrame
-from mbus.MBusFrameData import MBusFrameData
+from .MBusFrame import MBusFrame
+from .MBusFrameData import MBusFrameData
+from .MBusLowLevel import MBusLib
 
 class MBus:
     """
@@ -26,7 +25,6 @@ class MBus:
         """
 
         import os
-        from ctypes import cdll, util
 
         # check all given arguments for validity
         validargs = ('device','host','libpath','port')
@@ -59,13 +57,8 @@ class MBus:
             else:
                 raise TypeError("port number not given as integer")
 
-        if None == libpath:
-            libpath = util.find_library('mbus')
-
-        self._libmbus = cdll.LoadLibrary(libpath)
-
         try:
-            self._libmbus.mbus_get_current_version()
+            self._libmbus = MBusLib(libpath)
         except AttributeError:
             raise OSError("libmbus not found")
 
@@ -81,22 +74,16 @@ class MBus:
             if not os.isatty(fd):
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
-            mbus_context_serial = self._libmbus.mbus_context_serial
-            mbus_context_serial.restype = c_void_p
-            self.handle = mbus_context_serial(device)
+            self.handle = self._libmbus.context_serial(device)
         elif host != None and port:
-            mbus_context_tcp = self._libmbus.mbus_context_tcp
-            mbus_context_tcp.restype = c_void_p
-            self.handle = mbus_context_tcp(host)
+            self.handle = self._libmbus.context_tcp(host, port)
 
     def connect(self):
         """
         Connect to MBus.
         """
         if self.handle:
-            mbus_connect = self._libmbus.mbus_connect
-            mbus_connect.argtypes = [c_void_p]
-            if mbus_connect(self.handle) == -1:
+            if self._libmbus.connect(self.handle) == -1:
                 raise Exception("libmbus.mbus_connect failed")
         else:
             raise Exception("Handle object not configure")
@@ -106,9 +93,7 @@ class MBus:
         Disconnect from MBus.
         """
         if self.handle:
-            mbus_disconnect = self._libmbus.mbus_disconnect
-            mbus_disconnect.argtypes = [c_void_p]
-            if mbus_disconnect(self.handle) == -1:
+            if self._libmbus.disconnect(self.handle) == -1:
                 raise Exception("libmbus.mbus_disconnect failed")
         else:
             raise Exception("Handle object not configure")
@@ -118,9 +103,7 @@ class MBus:
         Low-level function: send an request frame to the given address.
         """
         if self.handle:
-            mbus_send_request_frame = self._libmbus.mbus_send_request_frame
-            mbus_send_request_frame.argtypes = [c_void_p, c_int]
-            if mbus_send_request_frame(self.handle, c_int(address)) == -1:
+            if self._libmbus.send_request_frame(self.handle, address) == -1:
                 raise Exception("libmbus.mbus_send_request_frame failed")
         else:
             raise Exception("Handle object not configure")
@@ -135,9 +118,7 @@ class MBus:
 
         reply = MBusFrame()
 
-        mbus_recv_frame = self._libmbus.mbus_recv_frame
-        mbus_recv_frame.argtypes = [c_void_p, c_void_p]
-        if mbus_recv_frame(self.handle, addressof(reply)) != 0:
+        if self._libmbus.recv_frame(self.handle, reply) != 0:
             raise Exception("libmbus.mbus_recv_frame failed")
 
         return reply
@@ -149,9 +130,7 @@ class MBus:
 
         reply_data = MBusFrameData()
 
-        mbus_frame_data_parse = self._libmbus.mbus_frame_data_parse
-        mbus_frame_data_parse.argtypes = [c_void_p, c_void_p]
-        if mbus_frame_data_parse(addressof(reply), addressof(reply_data)) != 0:
+        if self._libmbus.frame_data_parse(reply, reply_data) != 0:
             raise Exception("libmbus.mbus_frame_data_parse failed")
 
         return reply_data
@@ -161,9 +140,7 @@ class MBus:
         Low-level function: convert reply data frame to xml.
         """
 
-        mbus_frame_data_xml = self._libmbus.mbus_frame_data_xml
-        mbus_frame_data_xml.restype = c_char_p
-        xml_result = mbus_frame_data_xml(pointer(reply_data))
+        xml_result = self._libmbus.frame_data_xml(reply_data)
 
         if not xml_result:
             raise Exception("libmbus.mbus_frame_data_xml failed")
