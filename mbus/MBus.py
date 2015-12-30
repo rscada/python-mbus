@@ -115,9 +115,9 @@ class MBus:
         Low-level function: select secondary address
         """
         if self.handle:
-            if self._libmbus.mbus_select_secondary_address(
-                    self.handle, c_char_p(str.encode(str(address)))) == -1:
-                raise Exception("libmbus.mbus_select_secondary_address failed")
+            if self._libmbus.select_secondary_address(
+                    self.handle, str(address).encode('utf8')) == -1:
+                raise Exception("libmbus.select_secondary_address failed")
         else:
             raise Exception("Handle object not configure")
 
