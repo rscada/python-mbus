@@ -76,9 +76,9 @@ class MBus:
             if not os.isatty(fd):
                 raise TypeError(device+" is not a TTY")
             os.close(fd)
-            self.handle = self._libmbus.context_serial(device)
+            self.handle = self._libmbus.context_serial(device.encode('utf8'))
         elif host != None and port:
-            self.handle = self._libmbus.context_tcp(host, port)
+            self.handle = self._libmbus.context_tcp(host.encode('utf8'), port)
 
     def connect(self):
         """
@@ -158,4 +158,4 @@ class MBus:
         if not xml_result:
             raise Exception("libmbus.mbus_frame_data_xml failed")
 
-        return xml_result
+        return xml_result.decode('ISO-8859-1')
