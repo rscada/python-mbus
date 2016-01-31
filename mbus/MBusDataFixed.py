@@ -22,7 +22,7 @@ class MBusDataFixedMedium(Enum):
     HotWaterMode2 = 0x0C
     WaterMode2 = 0x0D
     HCAMode2 = 0x0E
-    Reserved = 0x0F
+    Reserved2 = 0x0F
 
 
 class MBusDataFixedUnit(Enum):
