@@ -406,7 +406,7 @@ class MBusLib(object):
         self.frame_verify                   = lib.mbus_frame_verify
         self.frame_verify.argtypes          = [mbus_frame_p]
         self.frame_verify.restype           = c_int
-    
+
         self.frame_internal_pack            = lib.mbus_frame_internal_pack
         self.frame_internal_pack.argtypes   = [mbus_frame_p, mbus_frame_data_p]
         self.frame_internal_pack.restype    = c_int
@@ -465,7 +465,7 @@ class MBusLib(object):
 
         self.frame_data_xml                 = lib.mbus_frame_data_xml
         self.frame_data_xml.argtypes        = [mbus_frame_data_p]
-        self.frame_data_xml.restype         = c_char_p
+        self.frame_data_xml.restype         = c_void_p
 
         self.data_variable_header_xml       = lib.mbus_data_variable_header_xml
         self.data_variable_header_xml.argtypes  = [mbus_data_variable_header_p]
