@@ -38,3 +38,7 @@ if debug:
 xml_buff = mbus.frame_data_xml(reply_data)
 
 print("xml_buff =", xml_buff)
+
+mbus.frame_data_free(reply_data)
+
+mbus.disconnect()
