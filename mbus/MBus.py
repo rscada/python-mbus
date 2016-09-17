@@ -2,6 +2,9 @@
 Python bindings for rSCADA libmbus.
 """
 
+from ctypes import cdll, cast, c_char_p
+from ctypes.util import find_library
+
 from .MBusFrame import MBusFrame
 from .MBusFrameData import MBusFrameData
 from .MBusLowLevel import MBusLib
@@ -64,6 +67,13 @@ class MBus:
         except AttributeError:
             raise OSError("libmbus not found")
 
+        # Load libC
+        try:
+            libc_path = find_library('c')
+            self._libc = cdll.LoadLibrary(libc_path)
+        except Exception as e:
+            raise OSError("libc not loaded properly: {}".format(e))
+
         if (None != device) and (None != host):
             raise BaseException("conflicting arguments 'device' and 'host' given")
 
@@ -79,6 +89,13 @@ class MBus:
             self.handle = self._libmbus.context_serial(device.encode('utf8'))
         elif host != None and port:
             self.handle = self._libmbus.context_tcp(host.encode('utf8'), port)
+
+    def __del__(self):
+        """
+        Free the context.
+        """
+        if self.handle:
+            self._libmbus.context_free(self.handle)
 
     def connect(self):
         """
@@ -158,4 +175,11 @@ class MBus:
         if not xml_result:
             raise Exception("libmbus.mbus_frame_data_xml failed")
 
-        return xml_result.decode('ISO-8859-1')
+        ret_val = cast(xml_result, c_char_p).value.decode('ISO-8859-1')
+        self._libc.free(xml_result)
+
+        return ret_val
+
+    def frame_data_free(self, frame_data):
+        if frame_data.data_var.record:
+            self._libmbus.data_record_free(frame_data.data_var.record)
